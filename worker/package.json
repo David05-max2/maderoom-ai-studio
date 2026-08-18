@@ -1,13 +1,15 @@
 {
-  "name": "maderoom-animation-worker",
+  "name": "maderoom-ai-worker",
   "version": "1.0.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "process:animations": "node process-animations.mjs"
+    "process:animations": "node process-animations.mjs",
+    "process:full": "node process-full-video.mjs"
   },
   "dependencies": {
     "@google/genai": "latest",
-    "@supabase/supabase-js": "latest"
+    "@supabase/supabase-js": "latest",
+    "openai": "latest"
   }
 }
