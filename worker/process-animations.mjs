@@ -6,21 +6,33 @@ import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 
-const SUPABASE_URL = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+const SUPABASE_URL = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://qlwcxovrdglmmvprddvj.supabase.co';
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const VEO_MODEL = process.env.VEO_MODEL || 'veo-3.1-lite-generate-preview';
 const VEO_REQUEST_SECONDS = Number(process.env.VEO_REQUEST_SECONDS || '6');
 const VEO_OUTPUT_SECONDS = Number(process.env.VEO_OUTPUT_SECONDS || '5');
 
-if (!SUPABASE_URL) throw new Error('Falta SUPABASE_URL');
-if (!SUPABASE_SERVICE_ROLE_KEY) throw new Error('Falta SUPABASE_SERVICE_ROLE_KEY');
-if (!GEMINI_API_KEY) throw new Error('Falta GEMINI_API_KEY');
+if (!SUPABASE_SERVICE_ROLE_KEY) {
+  console.log('Falta SUPABASE_SERVICE_ROLE_KEY en GitHub Secrets. No puedo leer/escribir Supabase desde el worker.');
+  process.exit(0);
+}
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
   auth: { persistSession: false, autoRefreshToken: false },
 });
-const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+
+async function getSetting(key) {
+  const { data, error } = await supabase
+    .from('maderoom_app_settings')
+    .select('setting_value')
+    .eq('setting_key', key)
+    .maybeSingle();
+  if (error) {
+    console.log(`No pude leer setting ${key}:`, error.message);
+    return null;
+  }
+  return data?.setting_value || null;
+}
 
 async function log(job, level, message, data = {}) {
   console.log(`[${level}] ${message}`);
@@ -57,7 +69,6 @@ async function getQueuedJob() {
     .order('created_at', { ascending: true })
     .limit(1)
     .maybeSingle();
-
   if (error) throw error;
   return data;
 }
@@ -74,7 +85,6 @@ async function getScenes(projectId) {
     .select('*')
     .eq('project_id', projectId)
     .order('scene_number', { ascending: true });
-
   if (error) throw error;
   return data || [];
 }
@@ -82,9 +92,7 @@ async function getScenes(projectId) {
 async function downloadSceneImage(scene, tmpDir) {
   const { data, error } = await supabase.storage.from('project-images').download(scene.image_path);
   if (error) throw error;
-
-  const arrayBuffer = await data.arrayBuffer();
-  const buffer = Buffer.from(arrayBuffer);
+  const buffer = Buffer.from(await data.arrayBuffer());
   const mimeType = data.type || 'image/png';
   const ext = mimeType.includes('jpeg') ? 'jpg' : mimeType.includes('webp') ? 'webp' : 'png';
   const filePath = path.join(tmpDir, `${String(scene.scene_number).padStart(2, '0')}_${scene.name}.${ext}`);
@@ -92,7 +100,7 @@ async function downloadSceneImage(scene, tmpDir) {
   return { buffer, mimeType, filePath };
 }
 
-async function generateVideoWithVeo(scene, imageBuffer, mimeType, rawOutputPath) {
+async function generateVideoWithVeo(ai, scene, imageBuffer, mimeType, rawOutputPath) {
   let operation = await ai.models.generateVideos({
     model: VEO_MODEL,
     prompt: scene.final_veo_prompt,
@@ -127,23 +135,16 @@ async function generateVideoWithVeo(scene, imageBuffer, mimeType, rawOutputPath)
 }
 
 async function trimVideo(rawPath, finalPath) {
-  const ffmpeg = spawnSync('ffmpeg', ['-y', '-i', rawPath, '-t', String(VEO_OUTPUT_SECONDS), '-c', 'copy', finalPath], {
-    encoding: 'utf-8',
-  });
-
+  const ffmpeg = spawnSync('ffmpeg', ['-y', '-i', rawPath, '-t', String(VEO_OUTPUT_SECONDS), '-c', 'copy', finalPath], { encoding: 'utf-8' });
   if (ffmpeg.status !== 0 || !existsSync(finalPath)) {
-    console.warn('FFmpeg copy trim falló, intentando reencode:', ffmpeg.stderr);
     const retry = spawnSync('ffmpeg', ['-y', '-i', rawPath, '-t', String(VEO_OUTPUT_SECONDS), '-vf', 'scale=720:1280:force_original_aspect_ratio=decrease,pad=720:1280:(ow-iw)/2:(oh-ih)/2', '-c:v', 'libx264', '-preset', 'fast', '-crf', '20', '-c:a', 'aac', '-b:a', '128k', finalPath], { encoding: 'utf-8' });
-    if (retry.status !== 0 || !existsSync(finalPath)) {
-      throw new Error(`FFmpeg no pudo recortar video: ${retry.stderr || ffmpeg.stderr}`);
-    }
+    if (retry.status !== 0 || !existsSync(finalPath)) throw new Error(`FFmpeg no pudo recortar video: ${retry.stderr || ffmpeg.stderr}`);
   }
 }
 
 async function uploadAnimation(project, scene, finalPath) {
   const bytes = await fs.readFile(finalPath);
   const storagePath = `${project.id}/animations/${String(scene.scene_number).padStart(2, '0')}_${scene.name}.mp4`;
-
   const { error } = await supabase.storage.from('scene-animations').upload(storagePath, bytes, {
     contentType: 'video/mp4',
     upsert: true,
@@ -151,7 +152,6 @@ async function uploadAnimation(project, scene, finalPath) {
   if (error) throw error;
 
   const publicUrl = supabase.storage.from('scene-animations').getPublicUrl(storagePath).data.publicUrl;
-
   await updateScene(scene.id, {
     status: 'animation_ready',
     animation_video_path: storagePath,
@@ -176,14 +176,25 @@ async function uploadAnimation(project, scene, finalPath) {
   return { storagePath, publicUrl };
 }
 
-async function processJob(job) {
+async function processJob(job, geminiApiKey) {
   const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'maderoom-'));
   const project = await getProject(job.project_id);
   const scenes = await getScenes(job.project_id);
 
-  if (scenes.length !== 6) {
-    throw new Error(`El proyecto debe tener 6 escenas. Encontré ${scenes.length}.`);
+  if (!geminiApiKey) {
+    await updateJob(job.id, { status: 'queued', current_step: 'Falta GEMINI_API_KEY en Configuración', error_message: null });
+    await updateProject(project.id, { status: 'waiting_config', error_message: 'Falta GEMINI_API_KEY en Configuración' });
+    await log(job, 'warn', 'Falta GEMINI_API_KEY. Agrega la clave en Configuración.');
+    return;
   }
+
+  if (scenes.length !== 6) {
+    await updateJob(job.id, { status: 'queued', current_step: `Esperando 6 escenas. Hay ${scenes.length}`, error_message: null });
+    await log(job, 'warn', `El proyecto debe tener 6 escenas. Encontré ${scenes.length}.`);
+    return;
+  }
+
+  const ai = new GoogleGenAI({ apiKey: geminiApiKey });
 
   await updateJob(job.id, { status: 'running', started_at: new Date().toISOString(), current_step: 'Iniciando Veo Lite', attempts: (job.attempts || 0) + 1 });
   await updateProject(project.id, { status: 'generating_animations', error_message: null });
@@ -206,7 +217,7 @@ async function processJob(job) {
     const rawPath = path.join(tmpDir, `${scene.name}_raw.mp4`);
     const finalPath = path.join(tmpDir, `${scene.name}_5s.mp4`);
 
-    await generateVideoWithVeo(scene, buffer, mimeType, rawPath);
+    await generateVideoWithVeo(ai, scene, buffer, mimeType, rawPath);
     await trimVideo(rawPath, finalPath);
     const uploaded = await uploadAnimation(project, scene, finalPath);
 
@@ -221,14 +232,15 @@ async function processJob(job) {
 
 async function main() {
   const job = await getQueuedJob();
-
   if (!job) {
     console.log('No hay jobs generate_animations en cola.');
     return;
   }
 
+  const geminiApiKey = process.env.GEMINI_API_KEY || await getSetting('GEMINI_API_KEY');
+
   try {
-    await processJob(job);
+    await processJob(job, geminiApiKey);
   } catch (error) {
     console.error(error);
     await updateJob(job.id, { status: 'failed', error_message: String(error?.message || error), current_step: 'Error en worker', finished_at: new Date().toISOString() });
