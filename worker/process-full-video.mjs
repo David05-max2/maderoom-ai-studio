@@ -7,23 +7,32 @@ import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 
-const SUPABASE_URL = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+const SUPABASE_URL = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://qlwcxovrdglmmvprddvj.supabase.co';
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const TTS_MODEL = process.env.OPENAI_TTS_MODEL || 'gpt-4o-mini-tts';
-const LYRİA_MODEL = process.env.LYRIA_MODEL || 'lyria-3-clip-preview';
+const LYRIA_MODEL = process.env.LYRIA_MODEL || 'lyria-3-clip-preview';
 
-if (!SUPABASE_URL) throw new Error('Falta SUPABASE_URL');
-if (!SUPABASE_SERVICE_ROLE_KEY) throw new Error('Falta SUPABASE_SERVICE_ROLE_KEY');
-if (!GEMINI_API_KEY) throw new Error('Falta GEMINI_API_KEY');
-if (!OPENAI_API_KEY) throw new Error('Falta OPENAI_API_KEY');
+if (!SUPABASE_SERVICE_ROLE_KEY) {
+  console.log('Falta SUPABASE_SERVICE_ROLE_KEY en GitHub Secrets. No puedo leer/escribir Supabase desde el worker.');
+  process.exit(0);
+}
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
   auth: { persistSession: false, autoRefreshToken: false },
 });
-const googleAI = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
-const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
+
+async function getSetting(key) {
+  const { data, error } = await supabase
+    .from('maderoom_app_settings')
+    .select('setting_value')
+    .eq('setting_key', key)
+    .maybeSingle();
+  if (error) {
+    console.log(`No pude leer setting ${key}:`, error.message);
+    return null;
+  }
+  return data?.setting_value || null;
+}
 
 async function log(job, level, message, data = {}) {
   console.log(`[${level}] ${message}`);
@@ -88,7 +97,7 @@ async function downloadFromStorage(bucket, storagePath, localPath) {
   return buffer;
 }
 
-async function generateVoice(project, scene, tmpDir) {
+async function generateVoice(openai, project, scene, tmpDir) {
   if (scene.voice_audio_path) return scene.voice_audio_path;
   if (!scene.voice_text?.trim()) throw new Error(`La escena ${scene.scene_number} no tiene texto de voz.`);
 
@@ -129,16 +138,12 @@ async function generateVoice(project, scene, tmpDir) {
   return storagePath;
 }
 
-async function generateMusic(project, tmpDir) {
+async function generateMusic(googleAI, project, tmpDir) {
   const existing = project.music_track_path || project?.metadata?.music_track_path;
   if (existing) return existing;
 
   const prompt = project.music_prompt || '30-second instrumental premium luxury interior design Reel background, modern Latin urban groove, soft afrobeat percussion, warm bass, no vocals, no lyrics, leave space for Spanish voiceover.';
-  const interaction = await googleAI.interactions.create({
-    model: LYRİA_MODEL,
-    input: prompt,
-  });
-
+  const interaction = await googleAI.interactions.create({ model: LYRIA_MODEL, input: prompt });
   const audio = interaction.outputAudio || interaction.output_audio;
   if (!audio?.data) throw new Error('Lyria no devolvió audio.');
 
@@ -180,7 +185,6 @@ async function composeFinalVideo(project, scenes, musicStoragePath, tmpDir) {
   for (const scene of scenes) {
     if (!scene.animation_video_path) throw new Error(`Falta animación de escena ${scene.scene_number}.`);
     if (!scene.voice_audio_path) throw new Error(`Falta voz de escena ${scene.scene_number}.`);
-
     const videoLocal = path.join(tmpDir, `${String(scene.scene_number).padStart(2, '0')}_${scene.name}.mp4`);
     const voiceLocal = path.join(tmpDir, `voz_${String(scene.scene_number).padStart(2, '0')}.mp3`);
     await downloadFromStorage('scene-animations', scene.animation_video_path, videoLocal);
@@ -189,7 +193,6 @@ async function composeFinalVideo(project, scenes, musicStoragePath, tmpDir) {
   }
 
   await downloadFromStorage('music-tracks', musicStoragePath, musicPath);
-
   await fs.writeFile(clipListPath, sceneFiles.map((x) => `file '${x.videoLocal.replace(/'/g, "'\\''")}'`).join('\n'));
   await fs.writeFile(voiceListPath, sceneFiles.map((x) => `file '${x.voiceLocal.replace(/'/g, "'\\''")}'`).join('\n'));
 
@@ -219,9 +222,7 @@ async function composeFinalVideo(project, scenes, musicStoragePath, tmpDir) {
     finalPath,
   ], { encoding: 'utf-8' });
 
-  if (ff.status !== 0 || !existsSync(finalPath)) {
-    throw new Error(`No pude componer video final: ${ff.stderr}`);
-  }
+  if (ff.status !== 0 || !existsSync(finalPath)) throw new Error(`No pude componer video final: ${ff.stderr}`);
 
   const buffer = await fs.readFile(finalPath);
   const storagePath = `${project.id}/final/video_final_maderoom.mp4`;
@@ -247,27 +248,55 @@ async function composeFinalVideo(project, scenes, musicStoragePath, tmpDir) {
   return { storagePath, publicUrl };
 }
 
-async function processFullJob(job) {
+async function processFullJob(job, geminiApiKey, openaiApiKey) {
   const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'maderoom-full-'));
   const project = await getProject(job.project_id);
   let scenes = await getScenes(project.id);
 
-  if (scenes.length !== 6) throw new Error(`El proyecto debe tener 6 escenas. Encontré ${scenes.length}.`);
-  if (scenes.some((s) => !s.animation_video_path)) throw new Error('Faltan animaciones. Primero procesa generate_animations.');
+  if (scenes.length !== 6) {
+    await updateJob(job.id, { status: 'queued', current_step: `Esperando 6 escenas. Hay ${scenes.length}`, error_message: null });
+    await log(job, 'warn', `El proyecto debe tener 6 escenas. Encontré ${scenes.length}.`);
+    return;
+  }
+
+  const readyAnimations = scenes.filter((s) => Boolean(s.animation_video_path)).length;
+  if (readyAnimations < 6) {
+    await updateJob(job.id, { status: 'queued', current_step: `Esperando animaciones ${readyAnimations}/6`, progress: 0, error_message: null });
+    await updateProject(project.id, { status: 'waiting_animations', error_message: null });
+    await log(job, 'info', `Esperando animaciones. Listas ${readyAnimations}/6.`);
+    return;
+  }
+
+  if (!openaiApiKey) {
+    await updateJob(job.id, { status: 'queued', current_step: 'Falta OPENAI_API_KEY en Configuración', error_message: null });
+    await updateProject(project.id, { status: 'waiting_config', error_message: 'Falta OPENAI_API_KEY en Configuración' });
+    await log(job, 'warn', 'Falta OPENAI_API_KEY. Agrega la clave en Configuración.');
+    return;
+  }
+
+  if (!geminiApiKey) {
+    await updateJob(job.id, { status: 'queued', current_step: 'Falta GEMINI_API_KEY en Configuración', error_message: null });
+    await updateProject(project.id, { status: 'waiting_config', error_message: 'Falta GEMINI_API_KEY en Configuración' });
+    await log(job, 'warn', 'Falta GEMINI_API_KEY. Agrega la clave en Configuración.');
+    return;
+  }
+
+  const openai = new OpenAI({ apiKey: openaiApiKey });
+  const googleAI = new GoogleGenAI({ apiKey: geminiApiKey });
 
   await updateJob(job.id, { status: 'running', started_at: new Date().toISOString(), current_step: 'Generando voces', attempts: (job.attempts || 0) + 1 });
   await updateProject(project.id, { status: 'generating_voice', error_message: null });
   await log(job, 'info', 'Iniciando generación de voces por escena.');
 
   for (let i = 0; i < scenes.length; i++) {
-    await generateVoice(project, scenes[i], tmpDir);
+    await generateVoice(openai, project, scenes[i], tmpDir);
     await updateJob(job.id, { progress: Math.round(((i + 1) / 18) * 100), current_step: `Voz ${i + 1}/6 lista` });
   }
 
   await updateProject(project.id, { status: 'generating_music' });
   await updateJob(job.id, { current_step: 'Generando melodía con Lyria' });
   await log(job, 'info', 'Generando melodía con Lyria.');
-  const musicPath = await generateMusic(project, tmpDir);
+  const musicPath = await generateMusic(googleAI, project, tmpDir);
 
   await updateProject(project.id, { status: 'composing_final' });
   await updateJob(job.id, { progress: 75, current_step: 'Componiendo video final con FFmpeg' });
@@ -287,8 +316,11 @@ async function main() {
     return;
   }
 
+  const geminiApiKey = process.env.GEMINI_API_KEY || await getSetting('GEMINI_API_KEY');
+  const openaiApiKey = process.env.OPENAI_API_KEY || await getSetting('OPENAI_API_KEY');
+
   try {
-    await processFullJob(job);
+    await processFullJob(job, geminiApiKey, openaiApiKey);
   } catch (error) {
     console.error(error);
     await updateJob(job.id, { status: 'failed', error_message: String(error?.message || error), current_step: 'Error en full worker', finished_at: new Date().toISOString() });
