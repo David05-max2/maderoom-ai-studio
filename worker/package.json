@@ -1,0 +1,13 @@
+{
+  "name": "maderoom-animation-worker",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "process:animations": "node process-animations.mjs"
+  },
+  "dependencies": {
+    "@google/genai": "latest",
+    "@supabase/supabase-js": "latest"
+  }
+}
