@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Maderoom AI Studio</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f4f0ea;color:#141414}.app{display:grid;grid-template-columns:270px 1fr;min-height:100vh}.side{background:#120905;color:white;padding:26px 20px}.brand{text-align:center;margin-bottom:26px}.logo{width:104px;height:104px;border-radius:50%;background:radial-gradient(circle,#777,#111);border:1px solid #caa65a;margin:0 auto 12px}.brand h1{font-size:28px;margin:0}.brand p{color:#d1a95b;margin:6px 0 0}.nav button{width:100%;border:0;background:transparent;color:white;text-align:left;padding:14px 16px;border-radius:14px;font-size:16px;margin-bottom:8px}.nav button.active{background:#805127}.main{padding:28px}.top{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:18px}h2{font-size:38px;margin:0 0 6px}p{color:#675b50}.btn{border:0;border-radius:14px;padding:12px 18px;font-weight:700;cursor:pointer}.dark{background:#120905;color:white}.gold{background:#d3aa59;color:#120905}.gray{background:#e7dfd5;color:#120905}.tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}.tab{background:white;border:1px solid #d9cdbf;border-radius:12px;padding:12px 18px;cursor:pointer}.tab.active{background:#120905;color:white}.panel{display:none}.panel.active{display:block}.card{background:white;border:1px solid #ded2c5;border-radius:24px;padding:18px;margin-bottom:16px}.grid{display:grid;grid-template-columns:repeat(3,minmax(210px,1fr));gap:18px}.scene{border:1px solid #ded2c5;border-radius:20px;padding:14px;background:#fff}.head{display:flex;justify-content:space-between;font-weight:800;margin-bottom:10px}.phone{aspect-ratio:9/16;background:#111;border-radius:20px;border:1px solid #333;display:flex;align-items:center;justify-content:center;overflow:hidden;color:#aaa;text-align:center}.phone img{width:100%;height:100%;object-fit:contain}.scene input{width:100%;margin-top:10px}textarea,select,input[type=text]{width:100%;border:1px solid #d8cabc;border-radius:14px;padding:13px;font-size:15px}textarea{min-height:340px;resize:vertical}.status{background:#101010;color:#dbffdb;border-radius:18px;padding:16px;white-space:pre-wrap;font-family:Consolas,monospace}.small{font-size:13px;color:#7c6f63}@media(max-width:900px){.app{grid-template-columns:1fr}.side{position:relative}.grid{grid-template-columns:1fr}.top{display:block}h2{font-size:30px}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand"><div class="logo"></div><h1>MADEROOM</h1><p>AI Studio Web</p></div>
+    <div class="nav"><button class="active">Nuevo proyecto</button><button>Jobs</button><button>Videos finales</button></div>
+  </aside>
+  <main class="main">
+    <div class="top"><div><h2>Nuevo proyecto</h2><p>6 imágenes + 1 prompt maestro + voz separada por ---</p></div><button class="btn dark" onclick="showTab('generar')">Generar</button></div>
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('imagenes')">1 · Imágenes</button>
+      <button class="tab" onclick="showTab('prompt')">2 · Prompt maestro</button>
+      <button class="tab" onclick="showTab('voz')">3 · Voz</button>
+      <button class="tab" onclick="showTab('generar')">4 · Generar</button>
+    </div>
+    <section id="imagenes" class="panel active"><div class="card"><h3>Sube las 6 imágenes verticales 9:16</h3><p class="small">Los nombres están fijados para coincidir con el prompt maestro.</p><div id="grid" class="grid"></div></div></section>
+    <section id="prompt" class="panel"><div class="card"><div style="display:flex;justify-content:space-between;gap:12px"><h3>Prompt maestro para Veo Lite</h3><button class="btn gray" onclick="fixPrompt()">Ajustar nombres + 5s</button></div><textarea id="promptText"></textarea></div></section>
+    <section id="voz" class="panel"><div class="card"><h3>Voz del video</h3><p class="small">Cada bloque separado por --- será una escena.</p><select id="voice"><option>marin</option><option>echo</option><option>nova</option><option>onyx</option><option>sage</option><option>shimmer</option></select><br><br><textarea id="voiceText">Así es como piensa un diseñador profesional antes de crear una cocina.
+---
+Primero organizamos el triángulo de trabajo entre la nevera, el fregadero y la estufa.
+---
+Después dividimos la cocina por zonas para que cada espacio tenga una función.
+---
+También diseñamos el almacenamiento para que todo quede justo donde lo necesitas.
+---
+Solo cuando todo funciona correctamente elegimos materiales resistentes y herrajes de calidad.
+---
+En Maderoom diseñamos cocinas inteligentes, funcionales y completamente hechas a tu medida.</textarea></div></section>
+    <section id="generar" class="panel"><div class="card"><h3>Validación del proyecto</h3><button class="btn gold" onclick="validateProject()">Validar 6 escenas</button><br><br><div id="status" class="status">Esperando validación…</div></div></section>
+  </main>
+</div>
+<script>
+const names=['01_hook_disenador','02_triangulo_trabajo','03_zonas_funcionales','04_almacenamiento_inteligente','05_materiales_herrajes','06_resultado_final'];
+const images=Array(6).fill(null);
+const defaultPrompt=`VIDEO_STYLE = """
+Director de fotografía especializado en arquitectura, diseño de interiores y contenido educativo premium.
+Animar únicamente la cámara.
+Mantener exactamente la misma cocina durante todo el video.
+Duración:
+5 segundos.
+Formato:
+9:16
+Video premium para Facebook Reels, Instagram Reels y TikTok.
+"""
+
+imagenes = [
+{"name":"01_hook_disenador","animation":"""Slow Push In. Duration 5 seconds."""},
+{"name":"02_triangulo_trabajo","animation":"""Slow Tilt Down. Duration 5 seconds."""},
+{"name":"03_zonas_funcionales","animation":"""Slow Push In. Duration 5 seconds."""},
+{"name":"04_almacenamiento_inteligente","animation":"""Slow Dolly Right. Duration 5 seconds."""},
+{"name":"05_materiales_herrajes","animation":"""Slow Push In. Duration 5 seconds."""},
+{"name":"06_resultado_final","animation":"""Slow Pull Back. Duration 5 seconds."""}
+]`;
+document.getElementById('promptText').value=defaultPrompt;
+function showTab(id){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById(id).classList.add('active');[...document.querySelectorAll('.tab')].find(t=>t.textContent.toLowerCase().includes(id==='imagenes'?'imágenes':id==='prompt'?'prompt':id==='voz'?'voz':'generar')).classList.add('active')}
+function render(){const g=document.getElementById('grid');g.innerHTML='';names.forEach((n,i)=>{const d=document.createElement('div');d.className='scene';d.innerHTML=`<div class="head"><span>Escena ${i+1}</span><span class="small">${n}</span></div><div class="phone" id="p${i}">Sin imagen<br>9:16 vertical</div><input type="file" accept="image/*">`;g.appendChild(d);d.querySelector('input').onchange=e=>{const f=e.target.files[0];images[i]=f;if(f){const r=new FileReader();r.onload=()=>{document.getElementById('p'+i).innerHTML='<img src="'+r.result+'">'};r.readAsDataURL(f)}}})}
+function fixPrompt(){let t=document.getElementById('promptText').value;t=t.replace(/animaciones\s*=\s*\[/g,'imagenes = [').replace(/04_almacenamiento/g,'04_almacenamiento_inteligente').replace(/05_materiales/g,'05_materiales_herrajes').replace(/4 segundos/g,'5 segundos').replace(/4 seconds/g,'5 seconds');document.getElementById('promptText').value=t;alert('Prompt ajustado a nombres correctos y 5 segundos')}
+function validateProject(){const missing=images.map((x,i)=>x?null:i+1).filter(Boolean);const voice=document.getElementById('voiceText').value.split('---').map(x=>x.trim()).filter(Boolean);let msg='';if(missing.length)msg+='Faltan imágenes: '+missing.join(', ')+'\n';if(voice.length!==6)msg+='La voz debe tener 6 bloques. Encontré: '+voice.length+'\n';names.forEach(n=>{if(!document.getElementById('promptText').value.includes(n))msg+='Falta en prompt: '+n+'\n'});if(!msg)msg='✅ Todo listo visualmente.\n\nSiguiente paso: conectar esta pantalla a backend/Supabase Worker para enviar a Veo Lite.';document.getElementById('status').textContent=msg;showTab('generar')}
+render();
+</script>
+</body>
+</html>
