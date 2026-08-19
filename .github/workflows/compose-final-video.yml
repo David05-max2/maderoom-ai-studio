@@ -30,7 +30,7 @@ jobs:
       - name: Install tools
         run: |
           sudo apt-get update
-          sudo apt-get install -y ffmpeg jq curl
+          sudo apt-get install -y ffmpeg jq curl bc
           ffmpeg -version
 
       - name: Resolve project id
@@ -63,8 +63,8 @@ jobs:
           echo "$MUSIC_BASE/$PROJECT_ID/music/melodia_maderoom.mp3" > music_url.txt
           test "$(wc -l < video_urls.txt | tr -d ' ')" = "6"
           test "$(wc -l < audio_urls.txt | tr -d ' ')" = "6"
-          grep -v -E '^(null|)$' video_urls.txt >/dev/null
-          grep -v -E '^(null|)$' audio_urls.txt >/dev/null
+          if grep -E '^(null|)$' video_urls.txt; then echo "Missing animation video URL" >&2; exit 1; fi
+          if grep -E '^(null|)$' audio_urls.txt; then echo "Missing voice audio URL" >&2; exit 1; fi
           echo "Music URL: $(cat music_url.txt)"
 
       - name: Download assets
@@ -90,38 +90,66 @@ jobs:
           curl -fL --retry 4 --retry-delay 3 -o music.mp3 "$MUSIC_URL"
           test -s music.mp3
 
-      - name: Build scene clips
+      - name: Build scene clips voice-led
         shell: bash
         run: |
           set -euo pipefail
+          : > scene-durations.txt
+
           for i in 1 2 3 4 5 6; do
             echo "Building scene $i"
+
+            VOICE_DUR=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "a${i}.mp3" | awk '{printf "%.3f", $1}')
+            VIDEO_DUR=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "v${i}.mp4" | awk '{printf "%.3f", $1}')
+
+            if [ -z "$VOICE_DUR" ] || [ "$(echo "$VOICE_DUR <= 0.10" | bc -l)" = "1" ]; then
+              echo "Invalid voice duration for scene $i: $VOICE_DUR" >&2
+              exit 1
+            fi
+
+            echo "Scene $i video duration: ${VIDEO_DUR}s"
+            echo "Scene $i voice duration: ${VOICE_DUR}s"
+            echo "scene_${i}: video=${VIDEO_DUR}s voice=${VOICE_DUR}s output=${VOICE_DUR}s" >> scene-durations.txt
+
+            # Regla de sincronía:
+            # - La voz manda la duración final.
+            # - Si el video es más corto que la voz, tpad congela el último frame y lo extiende.
+            # - Si el video es más largo que la voz, trim lo recorta al final de la voz.
             ffmpeg -y \
               -i "v${i}.mp4" \
               -i "a${i}.mp3" \
-              -t 5 \
               -map 0:v:0 -map 1:a:0 \
-              -vf "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2,setsar=1,fps=30" \
-              -af "apad,atrim=0:5" \
-              -c:v libx264 -preset veryfast -crf 24 \
+              -vf "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2,setsar=1,fps=30,tpad=stop_mode=clone:stop_duration=120,trim=duration=${VOICE_DUR},setpts=PTS-STARTPTS" \
+              -af "atrim=0:${VOICE_DUR},asetpts=PTS-STARTPTS" \
+              -c:v libx264 -preset veryfast -crf 24 -pix_fmt yuv420p \
               -c:a aac -b:a 128k \
+              -movflags +faststart \
               "seg${i}.mp4"
           done
+
+          cat scene-durations.txt
 
       - name: Concatenate and mix music
         shell: bash
         run: |
           set -euo pipefail
           printf "file 'seg1.mp4'\nfile 'seg2.mp4'\nfile 'seg3.mp4'\nfile 'seg4.mp4'\nfile 'seg5.mp4'\nfile 'seg6.mp4'\n" > list.txt
+
           ffmpeg -y -f concat -safe 0 -i list.txt -c copy joined.mp4
+
+          # Música de fondo a -20 dB, voz principal a volumen normal.
           ffmpeg -y \
             -i joined.mp4 \
             -stream_loop -1 -i music.mp3 \
-            -filter_complex "[0:a]volume=1.0[a0];[1:a]volume=0.18[a1];[a0][a1]amix=inputs=2:duration=first:dropout_transition=2[a]" \
+            -filter_complex "[0:a]volume=1.0[a0];[1:a]volume=-20dB[a1];[a0][a1]amix=inputs=2:duration=first:dropout_transition=2[a]" \
             -map 0:v:0 -map "[a]" \
             -c:v copy -c:a aac -b:a 160k \
             -shortest -movflags +faststart \
             maderoom_final.mp4
+
+          echo "Final durations:"
+          ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 joined.mp4
+          ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 maderoom_final.mp4
           ls -lh maderoom_final.mp4
 
       - name: Upload final video to Supabase
@@ -144,4 +172,5 @@ jobs:
             maderoom_final.mp4
             upload-result.json
             project.json
+            scene-durations.txt
           if-no-files-found: ignore
