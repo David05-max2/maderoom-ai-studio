@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Maderoom Composer Final</title>
+  <style>
+    *{box-sizing:border-box} body{margin:0;font-family:Arial,sans-serif;background:#f4f0ea;color:#141414} .wrap{max-width:980px;margin:0 auto;padding:22px} h1{font-size:36px;margin:18px 0 8px} p{color:#675b50;font-size:17px;line-height:1.35}.card{background:#fff;border:1px solid #ded2c5;border-radius:24px;padding:18px;margin:16px 0}.btn{border:0;border-radius:16px;padding:14px 18px;font-weight:800;margin:5px;cursor:pointer;font-size:16px}.gold{background:#d3aa59;color:#120905}.dark{background:#120905;color:#fff}.gray{background:#e7dfd5;color:#120905}.green{background:#16823a;color:#fff}.status{background:#101010;color:#dbffdb;border-radius:18px;padding:16px;white-space:pre-wrap;font-family:Consolas,monospace;overflow:auto;line-height:1.35}.stage{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.stage div{background:#fff;border:1px solid #ded2c5;border-radius:16px;padding:12px;text-align:center;font-weight:800}.done{background:#dff4e5!important;color:#16823a}.now{background:#d3aa59!important;color:#120905}.bad{background:#ffe0e0!important;color:#9b1c1c}.small{font-size:13px;color:#7c6f63}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.scene{border:1px solid #ded2c5;border-radius:18px;padding:12px;background:#fff}.scene video,.scene audio,video,audio{width:100%;margin-top:8px}.warn{border-left:5px solid #d3aa59;background:#fff7e5}.url{font-family:Consolas,monospace;font-size:12px;word-break:break-all;color:#6c5d50}.hide{display:none}@media(max-width:850px){.stage,.grid{grid-template-columns:1fr}h1{font-size:30px}.btn{width:100%;margin:6px 0}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <button class="btn gray" onclick="location.href='./?v=back-from-composer'">← Volver a Maderoom</button>
+    <h1>Composer final</h1>
+    <p>Esta pantalla crea el video final en tu dispositivo: 6 animaciones + 6 voces + música de fondo. Déjala abierta mientras trabaja.</p>
+
+    <div class="stage">
+      <div id="sAnim">Animaciones</div><div id="sVoice">Voces</div><div id="sMusic">Música</div><div id="sFinal">Video final</div>
+    </div>
+
+    <div class="card warn">
+      <strong>Importante en iPhone:</strong> crear el MP4 puede tardar varios minutos. No cierres Safari ni bloquees la pantalla. Si el teléfono se queda sin memoria, prueba desde laptop.
+    </div>
+
+    <div class="card">
+      <h2>Estado del proyecto</h2>
+      <p class="small">Proyecto activo:</p>
+      <div id="pidBox" class="url"></div>
+      <button class="btn gold" onclick="loadProject()">Actualizar estado</button>
+      <button class="btn dark" onclick="composeFinalVideo()">Crear video final MP4</button>
+      <div id="status" class="status">Esperando…</div>
+    </div>
+
+    <div id="musicBox" class="card hide"></div>
+    <div id="resultBox" class="card hide"></div>
+    <div id="scenesBox" class="grid"></div>
+  </div>
+
+<script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
+<script>
+const PROJECT_FALLBACK='0093d2a7-d20d-49b9-8d27-e9bda5eb3301';
+const SCENES_API='https://qlwcxovrdglmmvprddvj.supabase.co/functions/v1/maderoom-project-scenes';
+let activeProjectId=new URLSearchParams(location.search).get('project_id')||localStorage.getItem('maderoom_active_project_id')||PROJECT_FALLBACK;
+let project=null, scenes=[];
+let finalBlob=null;
+const $=id=>document.getElementById(id);
+function esc(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
+function log(msg){$('status').textContent=msg;}
+function append(msg){$('status').textContent += '\n' + msg; $('status').scrollTop=$('status').scrollHeight;}
+function setStage(anim,voice,music,final){$('sAnim').className=anim?'done':'now';$('sVoice').className=voice?'done':'now';$('sMusic').className=music?'done':'now';$('sFinal').className=final?'done':'now';}
+async function loadProject(){
+  $('pidBox').textContent=activeProjectId; localStorage.setItem('maderoom_active_project_id',activeProjectId);
+  log('⏳ Cargando proyecto...');
+  try{
+    const res=await fetch(SCENES_API+'?project_id='+encodeURIComponent(activeProjectId)+'&v='+Date.now());
+    const data=await res.json(); if(!res.ok) throw new Error(data.error||JSON.stringify(data));
+    project=data.project||{}; scenes=(data.scenes||[]).sort((a,b)=>(a.scene_number||0)-(b.scene_number||0));
+    const anim=scenes.filter(s=>s.animation_video_url).length;
+    const voice=scenes.filter(s=>s.voice_audio_url).length;
+    const music=!!project.music_track_url;
+    const final=!!project.final_video_url;
+    setStage(anim===6,voice===6,music,final);
+    let txt=`Estado del proyecto\nProyecto: ${activeProjectId}\nAnimaciones: ${anim}/6\nVoces: ${voice}/6\nMúsica: ${music?'lista ✅':'pendiente'}\nVideo final: ${final?'listo ✅':'pendiente'}`;
+    if(anim===6&&voice===6&&music&&!final) txt+='\n\nListo para crear MP4 en este dispositivo.';
+    log(txt);
+    renderMusic(); renderScenes(); renderExistingFinal();
+  }catch(e){log('❌ '+e.message)}
+}
+function renderMusic(){
+  const box=$('musicBox');
+  if(!project||!project.music_track_url){box.className='card hide';box.innerHTML='';return;}
+  box.className='card';
+  box.innerHTML=`<h2>🎵 Música generada</h2><p class="small">Si no suena al primer toque, toca el control de audio otra vez. Safari a veces bloquea el primer intento.</p><audio src="${esc(project.music_track_url)}" controls preload="metadata"></audio><br><button class="btn gray" onclick="window.open('${esc(project.music_track_url)}','_blank')">Abrir música</button>`;
+}
+function renderScenes(){
+  const box=$('scenesBox');
+  box.innerHTML=scenes.map(s=>`<div class="scene"><strong>Escena ${esc(s.scene_number)} · ${esc(s.name)}</strong><p class="small">Animación</p>${s.animation_video_url?`<video src="${esc(s.animation_video_url)}" controls playsinline preload="metadata"></video>`:'<div class="status">Sin video</div>'}<p class="small">Voz</p>${s.voice_audio_url?`<audio src="${esc(s.voice_audio_url)}" controls preload="metadata"></audio>`:'<div class="status">Sin voz</div>'}</div>`).join('');
+}
+function renderExistingFinal(){
+  if(project&&project.final_video_url){
+    $('resultBox').className='card';
+    $('resultBox').innerHTML=`<h2>✅ Video final guardado</h2><video src="${esc(project.final_video_url)}" controls playsinline></video><a class="btn green" href="${esc(project.final_video_url)}" download="maderoom_final.mp4">Descargar MP4</a>`;
+  }
+}
+async function fetchToUint8(url,label){
+  append('⬇️ Descargando '+label+'...');
+  const res=await fetch(url,{cache:'no-store'});
+  if(!res.ok) throw new Error('No pude descargar '+label+' HTTP '+res.status);
+  return new Uint8Array(await res.arrayBuffer());
+}
+async function ensureReady(){
+  if(!project||!scenes.length) await loadProject();
+  const missing=[];
+  if(scenes.filter(s=>s.animation_video_url).length<6) missing.push('faltan animaciones');
+  if(scenes.filter(s=>s.voice_audio_url).length<6) missing.push('faltan voces');
+  if(!project.music_track_url) missing.push('falta música');
+  if(missing.length) throw new Error(missing.join(', '));
+}
+async function composeFinalVideo(){
+  try{
+    await ensureReady();
+    if(!window.FFmpeg) throw new Error('No cargó FFmpeg WASM. Recarga la página e intenta de nuevo.');
+    const { createFFmpeg } = FFmpeg;
+    const ffmpeg=createFFmpeg({log:true,corePath:'https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js'});
+    log('⏳ Cargando motor de video FFmpeg...\nEsto puede tardar en iPhone.');
+    await ffmpeg.load();
+    append('✅ FFmpeg cargado.');
+    for(let i=0;i<6;i++){
+      const s=scenes[i];
+      ffmpeg.FS('writeFile',`v${i+1}.mp4`,await fetchToUint8(s.animation_video_url,`animación ${i+1}`));
+      ffmpeg.FS('writeFile',`a${i+1}.mp3`,await fetchToUint8(s.voice_audio_url,`voz ${i+1}`));
+      append('🎬 Preparando escena '+(i+1)+' / 6...');
+      await ffmpeg.run('-i',`v${i+1}.mp4`,'-i',`a${i+1}.mp3`,'-t','5','-map','0:v:0','-map','1:a:0','-vf','scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2,setsar=1,fps=30','-af','apad,atrim=0:5','-c:v','libx264','-preset','ultrafast','-crf','28','-c:a','aac','-b:a','128k',`seg${i+1}.mp4`);
+    }
+    ffmpeg.FS('writeFile','list.txt',new TextEncoder().encode(Array.from({length:6},(_,i)=>`file seg${i+1}.mp4`).join('\n')));
+    append('🔗 Uniendo las 6 escenas...');
+    await ffmpeg.run('-f','concat','-safe','0','-i','list.txt','-c','copy','joined.mp4');
+    ffmpeg.FS('writeFile','music.mp3',await fetchToUint8(project.music_track_url,'música'));
+    append('🎵 Mezclando voces + música...');
+    await ffmpeg.run('-i','joined.mp4','-stream_loop','-1','-i','music.mp3','-filter_complex','[0:a]volume=1.0[a0];[1:a]volume=0.18[a1];[a0][a1]amix=inputs=2:duration=first:dropout_transition=2[a]','-map','0:v:0','-map','[a]','-c:v','copy','-c:a','aac','-b:a','160k','-shortest','-movflags','+faststart','maderoom_final.mp4');
+    append('📦 Preparando descarga...');
+    const data=ffmpeg.FS('readFile','maderoom_final.mp4');
+    finalBlob=new Blob([data.buffer],{type:'video/mp4'});
+    const url=URL.createObjectURL(finalBlob);
+    $('resultBox').className='card';
+    $('resultBox').innerHTML=`<h2>✅ Video final creado</h2><p class="small">Se creó en este dispositivo. Descárgalo y guárdalo en Archivos/Fotos.</p><video src="${url}" controls playsinline></video><a class="btn green" href="${url}" download="maderoom_final.mp4">Descargar MP4</a>`;
+    $('sFinal').className='done';
+    append('✅ Listo. Video final creado. Toca Descargar MP4.');
+  }catch(e){
+    append('❌ '+(e.message||e));
+  }
+}
+loadProject();
+</script>
+</body>
+</html>
