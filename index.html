@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Maderoom AI Studio</title>
 <style>
-:root{--bg:#f4f0ea;--panel:#fff;--ink:#15110d;--muted:#72665c;--line:#ded2c5;--dark:#120905;--gold:#d3aa59;--soft:#e7dfd5;--ok:#16823a;--bad:#b00020}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,Helvetica,sans-serif}.app-shell{min-height:100vh;display:grid;grid-template-columns:270px 1fr}.sidebar{background:var(--dark);color:#fff;padding:26px 20px}.brand{text-align:center;margin-bottom:26px}.logo-circle{width:104px;height:104px;border-radius:50%;margin:0 auto 12px;background:radial-gradient(circle at 35% 30%,#777,#14100d 65%);border:1px solid var(--gold)}.brand h1{font-size:28px;margin:0;letter-spacing:.06em}.brand p{color:#d1a95b;margin:6px 0 0}.nav-button{width:100%;display:block;border:0;background:transparent;color:#fff;text-align:left;padding:14px 16px;border-radius:14px;font-size:16px;margin-bottom:8px;cursor:pointer}.nav-button.active{background:#805127}.main{padding:28px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}h2{font-size:38px;margin:0 0 6px}h3{margin:0 0 8px}.muted{color:var(--muted);line-height:1.45}.card{background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:18px;margin-bottom:16px}.tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}.tab{border:1px solid #d9cdbf;background:#fff;border-radius:12px;padding:12px 18px;cursor:pointer;font-weight:700}.tab.active{background:var(--dark);color:#fff}.btn{border:0;border-radius:14px;padding:12px 18px;font-weight:800;cursor:pointer;margin:4px;text-decoration:none;display:inline-block}.btn-dark{background:var(--dark);color:#fff}.btn-gold{background:var(--gold);color:var(--dark)}.btn-soft{background:var(--soft);color:var(--dark)}.btn-green{background:var(--ok);color:#fff}.btn-danger{background:#7c2d1c;color:#fff}.grid-3{display:grid;grid-template-columns:1fr 220px 220px;gap:12px}.scene-grid{display:grid;grid-template-columns:repeat(3,minmax(210px,1fr));gap:18px}.scene-card{border:1px solid var(--line);border-radius:20px;padding:14px;background:#fff}.scene-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:10px;font-weight:800}.scene-name{font-size:13px;color:var(--muted);word-break:break-word}.phone-frame{aspect-ratio:9/16;border-radius:20px;background:#111;border:1px solid #333;color:#aaa;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}.phone-frame img,.phone-frame video{width:100%;height:100%;object-fit:contain;background:#111}.scene-card input[type=file]{width:100%;margin-top:12px}.form-control,select,input[type=text],input[type=password],textarea{width:100%;border:1px solid #d8cabc;border-radius:14px;padding:13px;font-size:15px;background:#fff}textarea{min-height:330px;resize:vertical}.voice-area{min-height:250px}.status-box{background:#101010;color:#dbffdb;border-radius:18px;padding:16px;white-space:pre-wrap;font-family:Consolas,monaco,monospace;line-height:1.35;overflow:auto}.validation-list{color:var(--bad);line-height:1.55}.pill{display:inline-block;padding:5px 9px;border-radius:999px;background:#eee;font-size:12px;font-weight:800}.pill.ok{background:#dff4e5;color:var(--ok)}.pill.bad{background:#ffe0e0;color:var(--bad)}.pill.queued{background:#eee7dc;color:#4a3421}.pill.running{background:var(--gold);color:var(--dark)}.pill.completed{background:#dff4e5;color:var(--ok)}.pill.failed{background:#ffe0e0;color:var(--bad)}.progress{height:12px;background:#eee;border-radius:999px;overflow:hidden;margin-top:10px}.bar{height:100%;background:var(--gold);width:0}.page{display:none}.page.active{display:block}.panel{display:none}.panel.active{display:block}.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}.preview-row{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:12px}.preview-row div{background:#f3ede5;border:1px solid var(--line);border-radius:12px;padding:8px;font-size:12px;word-break:break-word}.stage{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}.stage div{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px;text-align:center;font-weight:800}.stage .done{background:#dff4e5;color:var(--ok)}.stage .now{background:var(--gold);color:var(--dark)}.url{font-family:Consolas,monaco,monospace;font-size:13px;word-break:break-all;color:#6c5d50;margin-top:8px}.warn{border-left:5px solid var(--gold);background:#fff7e5}.small{font-size:13px}.hide{display:none}@media(max-width:900px){.app-shell{grid-template-columns:1fr}.grid-3,.scene-grid,.stage{grid-template-columns:1fr}.topbar{display:block}h2{font-size:30px}.preview-row{grid-template-columns:1fr 1fr}.main{padding:18px}.sidebar{padding:20px}}
+:root{--bg:#f4f0ea;--panel:#fff;--ink:#15110d;--muted:#72665c;--line:#ded2c5;--dark:#120905;--gold:#d3aa59;--soft:#e7dfd5;--ok:#16823a;--bad:#b00020}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,Helvetica,sans-serif}.app-shell{min-height:100vh;display:grid;grid-template-columns:270px 1fr}.sidebar{background:var(--dark);color:#fff;padding:26px 20px}.brand{text-align:center;margin-bottom:26px}.logo-circle{width:104px;height:104px;border-radius:50%;margin:0 auto 12px;background:radial-gradient(circle at 35% 30%,#777,#14100d 65%);border:1px solid var(--gold)}.brand h1{font-size:28px;margin:0;letter-spacing:.06em}.brand p{color:#d1a95b;margin:6px 0 0}.nav-button{width:100%;display:block;border:0;background:transparent;color:#fff;text-align:left;padding:14px 16px;border-radius:14px;font-size:16px;margin-bottom:8px;cursor:pointer}.nav-button.active{background:#805127}.main{padding:28px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}h2{font-size:38px;margin:0 0 6px}h3{margin:0 0 8px}.muted{color:var(--muted);line-height:1.45}.card{background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:18px;margin-bottom:16px}.tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}.tab{border:1px solid #d9cdbf;background:#fff;border-radius:12px;padding:12px 18px;cursor:pointer;font-weight:700}.tab.active{background:var(--dark);color:#fff}.btn{border:0;border-radius:14px;padding:12px 18px;font-weight:800;cursor:pointer;margin:4px;text-decoration:none;display:inline-block}.btn-dark{background:var(--dark);color:#fff}.btn-gold{background:var(--gold);color:var(--dark)}.btn-soft{background:var(--soft);color:var(--dark)}.btn-green{background:var(--ok);color:#fff}.btn-danger{background:#7c2d1c;color:#fff}.grid-3{display:grid;grid-template-columns:1fr 220px 220px;gap:12px}.scene-grid{display:grid;grid-template-columns:repeat(3,minmax(210px,1fr));gap:18px}.project-grid{display:grid;grid-template-columns:repeat(2,minmax(260px,1fr));gap:18px}.scene-card,.project-card{border:1px solid var(--line);border-radius:20px;padding:14px;background:#fff}.scene-head,.project-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:10px;font-weight:800}.scene-name{font-size:13px;color:var(--muted);word-break:break-word}.phone-frame{aspect-ratio:9/16;border-radius:20px;background:#111;border:1px solid #333;color:#aaa;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}.phone-frame img,.phone-frame video{width:100%;height:100%;object-fit:contain;background:#111}.scene-card input[type=file]{width:100%;margin-top:12px}.form-control,select,input[type=text],input[type=password],textarea{width:100%;border:1px solid #d8cabc;border-radius:14px;padding:13px;font-size:15px;background:#fff}textarea{min-height:330px;resize:vertical}.voice-area{min-height:250px}.status-box{background:#101010;color:#dbffdb;border-radius:18px;padding:16px;white-space:pre-wrap;font-family:Consolas,monaco,monospace;line-height:1.35;overflow:auto}.validation-list{color:var(--bad);line-height:1.55}.pill{display:inline-block;padding:5px 9px;border-radius:999px;background:#eee;font-size:12px;font-weight:800}.pill.ok,.pill.completed{background:#dff4e5;color:var(--ok)}.pill.bad,.pill.failed{background:#ffe0e0;color:var(--bad)}.pill.queued{background:#eee7dc;color:#4a3421}.pill.running{background:var(--gold);color:var(--dark)}.progress{height:12px;background:#eee;border-radius:999px;overflow:hidden;margin-top:10px}.bar{height:100%;background:var(--gold);width:0}.page{display:none}.page.active{display:block}.panel{display:none}.panel.active{display:block}.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}.preview-row{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:12px}.preview-row div{background:#f3ede5;border:1px solid var(--line);border-radius:12px;padding:8px;font-size:12px;word-break:break-word}.stage{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}.stage div{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px;text-align:center;font-weight:800}.stage .done{background:#dff4e5;color:var(--ok)}.stage .now{background:var(--gold);color:var(--dark)}.url{font-family:Consolas,monaco,monospace;font-size:13px;word-break:break-all;color:#6c5d50;margin-top:8px}.warn{border-left:5px solid var(--gold);background:#fff7e5}.small{font-size:13px}.hide{display:none}@media(max-width:900px){.app-shell{grid-template-columns:1fr}.grid-3,.scene-grid,.project-grid,.stage{grid-template-columns:1fr}.topbar{display:block}h2{font-size:30px}.preview-row{grid-template-columns:1fr 1fr}.main{padding:18px}.sidebar{padding:20px}}
 </style>
 </head>
 <body>
@@ -20,16 +20,16 @@
   <main class="main">
     <section id="page-nuevo" class="page active">
       <header class="topbar">
-        <div><h2>Nuevo proyecto</h2><p class="muted">6 imágenes + 1 prompt maestro + voz en off. El sistema genera animaciones, voces, música y MP4 final.</p></div>
-        <button class="btn btn-dark" onclick="setTab('generar')">Crear proyecto</button>
+        <div><h2>Nuevo proyecto</h2><p class="muted">6 imágenes + 1 prompt maestro + voz + pipeline automático.</p></div>
+        <button class="btn btn-dark" onclick="showTab('generar')">Crear job para Veo Lite</button>
       </header>
 
       <section class="card">
         <h3>Datos del proyecto</h3>
         <div class="grid-3">
-          <input id="projectTitle" type="text" value="Cocina educativa premium" aria-label="Título del proyecto">
+          <input id="projectTitle" type="text" value="Cocina educativa premium">
           <select id="category"><option value="cocina">Cocina</option><option value="closet">Closet</option><option value="bano">Baño</option><option value="entretenimiento">Centro de entretenimiento</option></select>
-          <select id="selectedVoice"><option value="marin">marin</option><option value="echo">echo</option><option value="nova">nova</option><option value="onyx">onyx</option><option value="sage">sage</option><option value="shimmer">shimmer</option></select>
+          <select id="voice"><option value="marin">marin</option><option value="echo">echo</option><option value="nova">nova</option><option value="onyx">onyx</option><option value="sage">sage</option><option value="shimmer">shimmer</option></select>
         </div>
       </section>
 
@@ -40,45 +40,36 @@
         <button class="tab" data-tab="generar">4 · Generar</button>
       </nav>
 
-      <section id="tab-imagenes" class="panel active card">
-        <h3>Sube las 6 imágenes verticales 9:16</h3>
-        <p class="muted">Los nombres se leen del prompt maestro. Imagen 1 corresponde al primer <b>name</b>, imagen 2 al segundo, y así hasta la 6.</p>
-        <div class="toolbar"><button class="btn btn-gold" onclick="document.getElementById('multiUpload').click()">Seleccionar varias imágenes</button><button class="btn btn-soft" onclick="clearImages()">Limpiar imágenes</button><input id="multiUpload" type="file" accept="image/*" multiple hidden onchange="handleMultiUpload(event)"></div>
-        <div id="sceneGrid" class="scene-grid"></div>
+      <section id="tab-imagenes" class="panel active">
+        <section class="card"><h3>Sube las 6 imágenes verticales 9:16</h3><p class="muted">Los nombres salen del prompt maestro y cada imagen se asigna por orden.</p><div class="toolbar"><button class="btn btn-gold" onclick="document.getElementById('multiUpload').click()">Seleccionar varias imágenes</button><button class="btn btn-soft" onclick="clearImages()">Limpiar imágenes</button><button class="btn btn-soft" onclick="validateProject(true)">Validar</button><input id="multiUpload" type="file" multiple accept="image/*" style="display:none" onchange="handleMultiUpload(event)"></div><div id="imageGrid" class="scene-grid" style="margin-top:16px"></div></section>
       </section>
 
-      <section id="tab-prompt" class="panel card">
-        <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px"><div><h3>Prompt maestro de animación</h3><p class="muted">Debe contener <b>VIDEO_STYLE</b> y <b>animaciones = [...]</b> con 6 objetos <b>name</b> + <b>animation</b>. Este formato acepta bloques con triple comilla.</p></div><button class="btn btn-soft" onclick="loadDefaultPrompt()">Cargar ejemplo</button></div>
-        <textarea id="masterPrompt"></textarea>
-        <div id="promptStatus" class="status-box" style="margin-top:12px">Esperando prompt…</div>
+      <section id="tab-prompt" class="panel">
+        <section class="card"><div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap"><div><h3>Prompt maestro de animación</h3><p class="muted">Debe contener <b>VIDEO_STYLE</b> y <b>animaciones = [...]</b> con 6 objetos <b>name</b> + <b>animation</b>.</p></div><button class="btn btn-soft" onclick="loadDefaultPrompt()">Cargar ejemplo</button></div><textarea id="promptText"></textarea><div id="promptStatus" class="status-box" style="margin-top:12px">Esperando prompt…</div></section>
       </section>
 
-      <section id="tab-voz" class="panel card">
-        <h3>Voz del video</h3>
-        <p class="muted">Un bloque por escena, separado por tres guiones: <b>---</b>. Deben ser 6 bloques y se asignan en el mismo orden del prompt maestro.</p>
-        <textarea id="voiceScript" class="voice-area"></textarea>
-        <p class="muted">Bloques de voz detectados: <span id="voiceCount">0</span>/6</p>
+      <section id="tab-voz" class="panel">
+        <section class="card"><h3>Voz del video</h3><p class="muted">Un bloque por escena, separado por <b>---</b>. La duración final de cada escena la manda su voz.</p><textarea id="voiceText" class="voice-area"></textarea><p id="voiceStatus" class="muted">Bloques de voz detectados: 0/6</p></section>
       </section>
 
-      <section id="tab-generar" class="panel card">
-        <h3>Validación y generación</h3>
-        <div id="validationBox" class="status-box">Esperando validación…</div>
-        <div class="toolbar"><button class="btn btn-soft" onclick="validateProject(true)">Validar proyecto</button><button class="btn btn-gold" onclick="createProject()">Crear proyecto real</button><button class="btn btn-dark" onclick="continuePipeline()">Generar / continuar video completo</button></div>
-        <div id="createStatus" class="status-box" style="margin-top:14px">Esperando acción…</div>
+      <section id="tab-generar" class="panel">
+        <section class="card"><h3>Validación y generación</h3><div id="validationBox" class="status-box">Esperando acción…</div><div class="toolbar"><button class="btn btn-soft" onclick="validateProject(true)">Validar proyecto</button><button class="btn btn-gold" onclick="createJob()">Crear job real</button></div></section>
       </section>
     </section>
 
     <section id="page-jobs" class="page">
-      <header class="topbar"><div><h2>Jobs reales</h2><p class="muted">Trabajos creados por la app, con progreso real en Supabase.</p></div><button class="btn btn-soft" onclick="loadJobs()">Actualizar</button></header>
+      <header class="topbar"><div><h2>Jobs reales</h2><p class="muted">Procesos guardados por proyecto.</p></div><button class="btn btn-soft" onclick="loadJobs()">Actualizar</button></header>
+      <section class="card warn"><strong>Flujo:</strong> animaciones → voces → música → video final. Usa el botón para avanzar el proyecto activo.</section>
+      <section class="card"><h3>Proyecto activo</h3><div id="activeProjectBox" class="status-box">Sin proyecto activo.</div><div class="toolbar"><button class="btn btn-dark" onclick="runNextPipelineStep()">Generar / Continuar video completo</button><button class="btn btn-soft" onclick="loadActiveFinalState()">Actualizar estado</button></div></section>
       <div id="jobsList"></div>
     </section>
 
     <section id="page-finales" class="page">
-      <header class="topbar"><div><h2>Videos finales</h2><p class="muted">Estado final del proyecto activo y reproducción del MP4 cuando esté listo.</p></div><button class="btn btn-soft" onclick="loadFinalPanel()">Actualizar</button></header>
-      <div class="stage"><div id="stAnim">Animaciones</div><div id="stVoice">Voces</div><div id="stMusic">Música</div><div id="stFinal">Video final</div></div>
-      <section class="card"><h3>Worker final</h3><p class="muted">El token de GitHub se guarda solo en este navegador para disparar el ensamblador desde la página.</p><input id="githubToken" type="password" placeholder="GitHub Worker Token"><div class="toolbar"><button class="btn btn-soft" onclick="saveToken()">Guardar token local</button><button class="btn btn-danger" onclick="clearToken()">Borrar token</button><button class="btn btn-dark" onclick="dispatchFinalVideo()">Crear video final</button><button class="btn btn-soft" onclick="checkLatestWorkflowRun()">Ver estado del worker</button></div><div id="workerStatus" class="status-box" style="margin-top:14px">Token local: pendiente</div></section>
-      <div id="finalStatus" class="status-box">Esperando estado…</div><br>
-      <div id="mediaBox"></div>
+      <header class="topbar"><div><h2>Videos finales</h2><p class="muted">Biblioteca por proyecto. Cada proyecto conserva un solo MP4 final vigente.</p></div><button class="btn btn-soft" onclick="loadFinalProjects()">Actualizar</button></header>
+      <section class="card warn"><strong>Regla:</strong> si regeneras un video final de un proyecto, el MP4 anterior de ese mismo proyecto se elimina/reemplaza y queda guardado el nuevo.</section>
+      <section class="card"><h3>GitHub Worker Token local</h3><p class="muted">Solo es necesario para lanzar el worker FFmpeg desde esta página.</p><div class="grid-3"><input id="githubWorkerToken" type="password" placeholder="Pega aquí tu token si no está guardado"><button class="btn btn-gold" onclick="saveLocalGitHubToken()">Guardar token</button><button class="btn btn-danger" onclick="clearLocalGitHubToken()">Borrar token</button></div><div id="githubTokenState" class="status-box" style="margin-top:12px">Cargando…</div></section>
+      <section class="card"><h3>Estado del worker</h3><div id="workerStatus" class="status-box">Esperando acción…</div></section>
+      <div id="finalProjectsList" class="project-grid"></div>
     </section>
   </main>
 </div>
@@ -91,236 +82,83 @@ const MUSIC_API='https://qlwcxovrdglmmvprddvj.supabase.co/functions/v1/maderoom-
 const FINAL_STATUS_API='https://qlwcxovrdglmmvprddvj.supabase.co/functions/v1/maderoom-final-status';
 const REPO='David05-max2/maderoom-ai-studio';
 const WORKFLOW_FILE='compose-final-video.yml';
+const DEFAULT_PROJECT='0093d2a7-d20d-49b9-8d27-e9bda5eb3301';
+let activeProjectId=localStorage.getItem('maderoom_active_project_id')||DEFAULT_PROJECT;
 let sceneNames=['01_5_decisiones_cocina','02_recorrido_cocina','03_altura_meson','04_distancias_comodas','05_materiales_herrajes','06_cierre_maderoom'];
 let sceneAnimations=Array(6).fill('');
 let images=Array(6).fill(null);let previews=Array(6).fill('');
-let activeProjectId=localStorage.getItem('maderoom_active_project_id')||'';let activeAnimationJobId=localStorage.getItem('maderoom_active_animation_job_id')||'';let lastFinalState=null;
-const defaultVoice=`Hoy te mostramos cinco decisiones clave para diseñar una cocina funcional y elegante.
----
-Primero, revisa el recorrido: nevera, lavado, preparación y cocción deben trabajar como un flujo claro.
----
-Segundo, cuida la altura del mesón para que cocinar y preparar sea cómodo todos los días.
----
-Tercero, deja distancias cómodas alrededor de la isla para circular sin obstáculos.
----
-Cuarto, elige materiales y herrajes resistentes. Ahí está la diferencia entre verse bien y durar años.
----
-En Maderoom diseñamos cocinas a medida para Maicao, Riohacha y Uribia, pensadas para verse bien y funcionar mejor.`;
-const defaultPrompt=`VIDEO_STYLE = """
+const DEFAULT_PROMPT=`VIDEO_STYLE = """
 Director de fotografía especializado en arquitectura, cocinas integrales e interiores de lujo.
-
-OBJETIVO GENERAL:
-Convertir cada una de las 6 imágenes estáticas en un video cinematográfico premium de EXACTAMENTE 5 segundos.
-
-REGLA PRINCIPAL:
-ANIMAR ÚNICAMENTE LA CÁMARA.
-
-La cocina, muebles, textos, gráficos y objetos deben permanecer físicamente congelados.
-
-MANTENER EXACTAMENTE:
-• misma arquitectura
-• misma distribución
-• misma isla
-• mismos gabinetes
-• mismos electrodomésticos
-• mismos materiales
-• mismos colores
-• misma iluminación
-• mismas banquetas
-• mismo piso
-• misma decoración
-• mismas proporciones
-
-MANTENER COMPLETAMENTE ESTABLES:
-• títulos
-• subtítulos
-• números
-• flechas
-• líneas
-• medidas
-• iconos
-• marcadores
-• gráficos educativos
-• logos
-• objetos sobre el mesón
-• electrodomésticos
-• herrajes
-
-PROHIBIDO:
-• abrir o cerrar puertas
-• abrir o cerrar cajones
-• mover electrodomésticos
-• mover banquetas
-• mover decoración
-• cambiar materiales
-• cambiar colores
-• cambiar iluminación
-• deformar muebles
-• cambiar arquitectura
-• modificar proporciones
-• agregar personas
-• eliminar objetos
-• agregar objetos nuevos
-• cambiar los textos
-• deformar las letras
-• animar los textos
-• mover números o flechas
-• generar morphing
-• generar warping
-• crear geometrías imposibles
-• rediseñar el logo
-
-TEXTOS Y GRÁFICOS:
-Todos los textos y elementos educativos deben permanecer perfectamente anclados a la imagen.
-
-No vibrar.
-No desplazarse.
-No deformarse.
-No desaparecer.
-No cambiar palabras.
-
-MOVIMIENTO DE CÁMARA:
-Muy lento.
-Suave.
-Elegante.
-Cinematográfico.
-Fotografía arquitectónica premium.
-
-Nada de movimientos bruscos.
-Nada de zoom rápido.
-Nada de cámara temblorosa.
-Nada de cambios extremos de perspectiva.
-
-LOOK:
-Architectural Digest.
-Ultra photorealistic.
-Premium interior photography.
-Warm cinematic lighting.
-Natural shadows.
-Realistic materials.
-Luxury commercial aesthetic.
-
-DURACIÓN:
-EXACTAMENTE 5 segundos por escena.
-
-FORMATO:
-Vertical 9:16.
-Instagram Reels.
-Facebook Reels.
-TikTok.
+OBJETIVO GENERAL: Convertir cada una de las 6 imágenes estáticas en un video cinematográfico premium. ANIMAR ÚNICAMENTE LA CÁMARA.
+Mantener cocina, muebles, textos, gráficos y objetos físicamente congelados. Movimiento muy lento, suave, elegante y cinematográfico. Formato vertical 9:16.
 """
 
 animaciones = [
-{
-"name": "01_5_decisiones_cocina",
-"animation": """
-CAMERA MOVEMENT:
-Slow Cinematic Push In.
-Comenzar con una vista amplia de toda la cocina.
-Realizar un acercamiento MUY lento hacia la isla central durante los 5 segundos.
-OBJETIVO:
-Presentar la cocina completa y crear curiosidad sobre las cinco decisiones de diseño.
-MANTENER COMPLETAMENTE ESTABLE:
-• título
-• subtítulo
-• cocina
-• muebles
-• electrodomésticos
-• decoración
-Duration exactly 5 seconds.
-"""
-},
-{
-"name": "02_recorrido_cocina",
-"animation": """
-CAMERA MOVEMENT:
-Slow Elevated Dolly Forward.
-Mantener la perspectiva ligeramente elevada.
-Realizar un movimiento muy lento hacia adelante para reforzar visualmente el recorrido de trabajo.
-OBJETIVO:
-Destacar el flujo funcional: NEVERA → LAVADO → PREPARACIÓN → COCCIÓN.
-Las flechas, iconos, números y líneas permanecen exactamente donde están.
-Duration exactly 5 seconds.
-"""
-},
-{
-"name": "03_altura_meson",
-"animation": """
-CAMERA MOVEMENT:
-Slow Tilt Down + Subtle Push In.
-Descender muy lentamente hacia la isla y el mesón mientras se realiza un acercamiento mínimo.
-OBJETIVO:
-Dirigir la atención hacia la altura y ergonomía del mesón.
-No modificar la altura de ningún elemento. No mover las banquetas. No deformar la isla.
-Duration exactly 5 seconds.
-"""
-},
-{
-"name": "04_distancias_comodas",
-"animation": """
-CAMERA MOVEMENT:
-Slow Pull Back.
-Comenzar ligeramente cerca de la isla.
-Alejar muy lentamente la cámara para revelar mejor los pasillos y el espacio de circulación.
-No cambiar la distancia entre muebles. No desplazar la isla. No modificar las flechas.
-Duration exactly 5 seconds.
-"""
-},
-{
-"name": "05_materiales_herrajes",
-"animation": """
-CAMERA MOVEMENT:
-Slow Cinematic Push In.
-Realizar un acercamiento muy lento y elegante hacia los materiales y detalles de la cocina.
-No abrir cajones. No mover puertas. No crear herrajes nuevos. No modificar materiales.
-Duration exactly 5 seconds.
-"""
-},
-{
-"name": "06_cierre_maderoom",
-"animation": """
-CAMERA MOVEMENT:
-Slow Cinematic Pull Back.
-Alejar muy lentamente la cámara para terminar mostrando toda la composición.
-NO modificar, redibujar, sustituir, cambiar colores ni animar el logo original de Maderoom.
-Duration exactly 5 seconds.
-"""
-}
+{"name":"01_5_decisiones_cocina","animation":"""
+Slow Cinematic Push In. Comenzar con una vista amplia de toda la cocina y acercarse lentamente hacia la isla central. Duration exactly 5 seconds.
+"""},
+{"name":"02_recorrido_cocina","animation":"""
+Slow Elevated Dolly Forward. Mantener la perspectiva elevada y reforzar el recorrido de trabajo. Duration exactly 5 seconds.
+"""},
+{"name":"03_altura_meson","animation":"""
+Slow Tilt Down + Subtle Push In. Dirigir la atención hacia la altura y ergonomía del mesón. Duration exactly 5 seconds.
+"""},
+{"name":"04_distancias_comodas","animation":"""
+Slow Pull Back. Revelar pasillos y espacio de circulación alrededor de la isla. Duration exactly 5 seconds.
+"""},
+{"name":"05_materiales_herrajes","animation":"""
+Slow Cinematic Push In hacia materiales, mesón, madera, gabinetes y herrajes. Duration exactly 5 seconds.
+"""},
+{"name":"06_cierre_maderoom","animation":"""
+Slow Cinematic Pull Back. Cerrar mostrando toda la cocina terminada con logo estable. Duration exactly 5 seconds.
+"""}
 ]`;
+const DEFAULT_VOICE=`Así es como piensa un diseñador profesional antes de crear una cocina.
+---
+Primero organizamos el recorrido funcional para que cocinar sea más cómodo y eficiente.
+---
+Después revisamos la altura del mesón y la relación con las banquetas.
+---
+También cuidamos las distancias para que la circulación sea cómoda alrededor de la isla.
+---
+Luego elegimos materiales y herrajes resistentes para una cocina de uso real.
+---
+En Maderoom diseñamos cocinas funcionales, elegantes y hechas a tu medida.`;
 function esc(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
-function setText(id,t){const el=document.getElementById(id);if(el)el.textContent=t}
-function parseScenes(text){const re=/\{\s*["']name["']\s*:\s*["']([^"']+)["']\s*,\s*["']animation["']\s*:\s*(?:"""([\s\S]*?)"""|'''([\s\S]*?)'''|"([\s\S]*?)"|'([\s\S]*?)')\s*\}/g;const scenes=[];let m;while((m=re.exec(String(text||'')))!==null){scenes.push({name:String(m[1]||'').trim(),animation:String(m[2]??m[3]??m[4]??m[5]??'').trim()})}return scenes}
-function splitVoice(){return document.getElementById('voiceScript').value.split('---').map(x=>x.trim()).filter(Boolean)}
-function syncPrompt(show=true){const scenes=parseScenes(document.getElementById('masterPrompt').value);if(scenes.length===6&&new Set(scenes.map(s=>s.name)).size===6&&scenes.every(s=>s.name&&s.animation&&/^[A-Za-z0-9_-]+$/.test(s.name))){sceneNames=scenes.map(s=>s.name);sceneAnimations=scenes.map(s=>s.animation);if(show)setText('promptStatus','✅ 6 escenas detectadas:\n'+sceneNames.map((n,i)=>`${i+1}. ${n}`).join('\n'));renderImages();return {ok:true,scenes}}let msg=`❌ El prompt debe tener exactamente 6 objetos name + animation. Encontré ${scenes.length}.`;if(scenes.some(s=>!s.animation))msg+='\nHay escenas sin animation.';if(new Set(scenes.map(s=>s.name)).size!==scenes.length)msg+='\nHay nombres repetidos.';if(show)setText('promptStatus',msg);return {ok:false,scenes,error:msg}}
-function renderImages(){const grid=document.getElementById('sceneGrid');grid.innerHTML=sceneNames.map((name,i)=>`<div class="scene-card"><div class="scene-head"><span>Escena ${i+1}</span><span class="scene-name">${esc(name)}</span></div><div class="phone-frame">${previews[i]?`<img src="${previews[i]}" alt="${esc(name)}">`:'<span>Sin imagen<br>Formato vertical 9:16</span>'}</div><input type="file" accept="image/*" onchange="handleImage(event,${i})"><p class="muted small">${esc((sceneAnimations[i]||'').slice(0,160))}${(sceneAnimations[i]||'').length>160?'…':''}</p></div>`).join('')}
-function handleImage(e,i){const file=e.target.files?.[0];if(!file)return;images[i]=file;if(previews[i])URL.revokeObjectURL(previews[i]);previews[i]=URL.createObjectURL(file);renderImages()}
-function handleMultiUpload(e){[...(e.target.files||[])].slice(0,6).forEach((file,i)=>{images[i]=file;if(previews[i])URL.revokeObjectURL(previews[i]);previews[i]=URL.createObjectURL(file)});renderImages()}
-function clearImages(){images=Array(6).fill(null);previews.forEach(u=>u&&URL.revokeObjectURL(u));previews=Array(6).fill('');renderImages()}
-function loadDefaultPrompt(){document.getElementById('masterPrompt').value=defaultPrompt;syncPrompt(true)}
-function setPage(name){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+name).classList.add('active');document.querySelectorAll('.nav-button').forEach(b=>b.classList.toggle('active',b.dataset.page===name));if(name==='jobs')loadJobs();if(name==='finales')loadFinalPanel()}
-function setTab(name){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.getElementById('tab-'+name).classList.add('active');document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));if(name==='prompt')syncPrompt(true);if(name==='generar')validateProject(true)}
-function validateProject(show=false){const p=syncPrompt(false);const voice=splitVoice();document.getElementById('voiceCount').textContent=voice.length;const missing=images.map((f,i)=>f?null:`Falta imagen para ${sceneNames[i]}`).filter(Boolean);const errors=[];if(!p.ok)errors.push(p.error);if(voice.length!==6)errors.push(`La voz debe tener 6 bloques separados por ---. Encontré ${voice.length}.`);errors.push(...missing);const ok=errors.length===0;if(show){setText('validationBox',ok?`✅ Todo listo.\n\nEscenas:\n${sceneNames.map((n,i)=>`${i+1}. ${n}`).join('\n')}\n\nPuedes crear el proyecto real.`:`No puedes crear el proyecto todavía:\n\n${errors.map(e=>'• '+e).join('\n')}`)}return ok}
-async function createProject(){setTab('generar');if(!validateProject(true))return;const fd=new FormData();fd.append('project_title',document.getElementById('projectTitle').value.trim()||'Proyecto Maderoom Web');fd.append('category',document.getElementById('category').value);fd.append('selected_voice',document.getElementById('selectedVoice').value);fd.append('master_animation_prompt',document.getElementById('masterPrompt').value);fd.append('voice_script',document.getElementById('voiceScript').value);images.forEach((file,i)=>{fd.append(`scene_name_${i+1}`,sceneNames[i]);fd.append(`scene_file_${i+1}`,file,sceneNames[i]+'.png')});setText('createStatus','Subiendo imágenes y creando proyecto real en Supabase…');try{const res=await fetch(API+'/create-animation-job',{method:'POST',body:fd});const data=await res.json();if(!res.ok||!data.ok)throw new Error(data.errors?.join('\n')||data.error||'No se pudo crear el proyecto.');activeProjectId=data.project_id;activeAnimationJobId=data.job_id;localStorage.setItem('maderoom_active_project_id',activeProjectId);localStorage.setItem('maderoom_active_animation_job_id',activeAnimationJobId);setText('createStatus',`✅ Proyecto creado.\n\nProyecto: ${activeProjectId}\nJob: ${activeAnimationJobId}\n\nAhora toca “Generar / continuar video completo”.`)}catch(e){setText('createStatus','❌ '+e.message)}}
-async function getFinalState(){if(!activeProjectId)throw new Error('Primero crea o selecciona un proyecto.');const res=await fetch(FINAL_STATUS_API+'?project_id='+encodeURIComponent(activeProjectId)+'&v='+Date.now());const data=await res.json();if(!res.ok)throw new Error(data.error||JSON.stringify(data));lastFinalState=data;return data}
-async function continuePipeline(){try{if(!activeProjectId)throw new Error('Primero crea el proyecto real.');const state=await getFinalState();const c=state.counts||{};if((c.animations||0)<6){setText('createStatus','Procesando siguiente animación con Veo Lite…');const res=await fetch(PROCESS_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({job_id:activeAnimationJobId,project_id:activeProjectId})});const data=await res.json();if(!res.ok||data.ok===false)throw new Error(data.error||JSON.stringify(data));setText('createStatus',`✅ ${data.message||'Animación procesada'}\nProgreso: ${data.progress??'-'}%`);return}
-if((c.voices||0)<6){setText('createStatus','Generando siguiente voz…');const res=await fetch(VOICE_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({project_id:activeProjectId})});const data=await res.json();if(!res.ok||data.error)throw new Error(data.error||JSON.stringify(data));setText('createStatus',`✅ ${data.message||'Voz generada'}\nProgreso: ${data.progress??'-'}%`);return}
-if(!state.urls?.music){setText('createStatus','Generando música de fondo…');const res=await fetch(MUSIC_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({project_id:activeProjectId})});const data=await res.json();if(!res.ok||data.error)throw new Error(data.error||JSON.stringify(data));setText('createStatus','✅ Música lista. Ahora puedes crear el video final en Videos finales.');return}
-if(!state.urls?.final_video){setPage('finales');setText('workerStatus','Todo listo para ensamblar. Toca “Crear video final”.');return}
-setText('createStatus','✅ El video final ya está listo. Ve a Videos finales.')}catch(e){setText('createStatus','❌ '+e.message)}}
-async function loadJobs(){const box=document.getElementById('jobsList');box.innerHTML='<div class="status-box">Cargando jobs…</div>';try{const res=await fetch(API+'/jobs?v='+Date.now());const data=await res.json();if(!res.ok)throw new Error(data.error||JSON.stringify(data));const jobs=data.jobs||[];box.innerHTML=jobs.map(j=>`<div class="card"><h3>${esc(j.job_type)} <span class="pill ${esc(j.status)}">${esc(j.status)}</span></h3><p class="muted">${esc(j.current_step||'')}</p><div class="progress"><div class="bar" style="width:${Number(j.progress||0)}%"></div></div><p class="muted small">${Number(j.progress||0)}% · Proyecto ${esc(j.project_id||'')}</p><button class="btn btn-soft" onclick="selectProject('${esc(j.project_id)}','${esc(j.job_type==='generate_animations'?j.id:'')}')">Usar este proyecto</button></div>`).join('')||'<div class="card">No hay jobs todavía.</div>'}catch(e){box.innerHTML='<div class="status-box">❌ '+esc(e.message)+'</div>'}}
-function selectProject(pid,jobid=''){activeProjectId=pid;if(jobid)activeAnimationJobId=jobid;localStorage.setItem('maderoom_active_project_id',pid);if(jobid)localStorage.setItem('maderoom_active_animation_job_id',jobid);setText('createStatus','Proyecto seleccionado: '+pid);setPage('finales')}
-function setStages(c,urls){const a=(c.animations||0)>=6,v=(c.voices||0)>=6,m=!!urls?.music,f=!!urls?.final_video;document.getElementById('stAnim').className=a?'done':'now';document.getElementById('stVoice').className=v?'done':(a?'now':'');document.getElementById('stMusic').className=m?'done':(v?'now':'');document.getElementById('stFinal').className=f?'done':(m?'now':'')}
-async function loadFinalPanel(){renderTokenState();const media=document.getElementById('mediaBox');try{if(!activeProjectId){setText('finalStatus','Primero crea o selecciona un proyecto.');media.innerHTML='';return}const data=await getFinalState();const c=data.counts||{};setStages(c,data.urls||{});setText('finalStatus',`Proyecto: ${activeProjectId}\nAnimaciones: ${c.animations||0}/6\nVoces: ${c.voices||0}/6\nMúsica: ${data.urls?.music?'lista ✅':'pendiente'}\nVideo final: ${data.urls?.final_video?'listo ✅':'pendiente'}\n\n${data.message||''}`);let html='';if(data.urls?.music)html+=`<section class="card"><h3>🎵 Música</h3><audio src="${esc(data.urls.music)}" controls></audio><div class="url">${esc(data.urls.music)}</div></section>`;if(data.urls?.final_video)html+=`<section class="card"><h3>✅ Video final</h3><video src="${esc(data.urls.final_video)}" controls playsinline></video><div class="toolbar"><a class="btn btn-green" href="${esc(data.urls.final_video)}" download="maderoom_final.mp4">Descargar MP4</a><button class="btn btn-soft" onclick="window.open('${esc(data.urls.final_video)}','_blank')">Abrir video</button></div><div class="url">${esc(data.urls.final_video)}</div></section>`;media.innerHTML=html||'<section class="card warn"><h3>Video final pendiente</h3><p class="muted">Cuando animaciones, voces y música estén listas, crea el MP4 final desde esta misma página.</p></section>'}catch(e){setText('finalStatus','❌ '+e.message)}}
-function getToken(){return localStorage.getItem('maderoom_github_worker_token')||''}
-function saveToken(){const v=document.getElementById('githubToken').value.trim();if(!v){setText('workerStatus','Pega el token primero.');return}localStorage.setItem('maderoom_github_worker_token',v);document.getElementById('githubToken').value='';renderTokenState()}
-function clearToken(){localStorage.removeItem('maderoom_github_worker_token');renderTokenState()}
-function renderTokenState(){setText('workerStatus',getToken()?'Token local: guardado ✅':'Token local: pendiente')}
-async function githubFetch(path,opts={}){const token=getToken();if(!token)throw new Error('Falta GitHub Worker Token. Guárdalo en esta página.');const res=await fetch('https://api.github.com'+path,{...opts,headers:{Authorization:'Bearer '+token,Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28','Content-Type':'application/json',...(opts.headers||{})}});if(res.status===204)return {ok:true};let data={};try{data=await res.json()}catch{}if(!res.ok)throw new Error(data.message||('GitHub HTTP '+res.status));return data}
-async function dispatchFinalVideo(){try{const state=await getFinalState();const c=state.counts||{};if((c.animations||0)<6)throw new Error('Faltan animaciones.');if((c.voices||0)<6)throw new Error('Faltan voces.');if(!state.urls?.music)throw new Error('Falta música.');setText('workerStatus','Disparando worker FFmpeg…');await githubFetch('/repos/'+REPO+'/actions/workflows/'+encodeURIComponent(WORKFLOW_FILE)+'/dispatches',{method:'POST',body:JSON.stringify({ref:'main',inputs:{project_id:activeProjectId}})});setText('workerStatus','✅ Worker FFmpeg disparado. Espera unos minutos y toca “Ver estado del worker”.');setTimeout(checkLatestWorkflowRun,2000)}catch(e){setText('workerStatus','❌ '+e.message)}}
-async function checkLatestWorkflowRun(){try{const data=await githubFetch('/repos/'+REPO+'/actions/workflows/'+encodeURIComponent(WORKFLOW_FILE)+'/runs?per_page=1');const r=(data.workflow_runs||[])[0];if(!r){setText('workerStatus','No hay ejecuciones del worker todavía.');return}setText('workerStatus',`Último worker FFmpeg\nEstado: ${r.status}\nConclusión: ${r.conclusion||'-'}\nCreado: ${r.created_at}\nURL: ${r.html_url}`);if(r.status==='completed')loadFinalPanel()}catch(e){setText('workerStatus','❌ '+e.message)}}
-document.querySelectorAll('.nav-button').forEach(b=>b.addEventListener('click',()=>setPage(b.dataset.page)));
-document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>setTab(b.dataset.tab)));
-document.getElementById('masterPrompt').value=defaultPrompt;document.getElementById('voiceScript').value=defaultVoice;document.getElementById('masterPrompt').addEventListener('input',()=>syncPrompt(true));document.getElementById('voiceScript').addEventListener('input',()=>{document.getElementById('voiceCount').textContent=splitVoice().length});syncPrompt(true);renderImages();document.getElementById('voiceCount').textContent=splitVoice().length;renderTokenState();
+function setTxt(id,t){const el=document.getElementById(id);if(el)el.textContent=t}
+function parseScenes(text){const re=/\{\s*["']name["']\s*:\s*["']([^"']+)["']\s*,\s*["']animation["']\s*:\s*(?:"""([\s\S]*?)"""|'''([\s\S]*?)'''|"([\s\S]*?)"|'([\s\S]*?)')\s*\}/g;const out=[];let m;while((m=re.exec(String(text||'')))!==null){out.push({name:m[1].trim(),animation:(m[2]??m[3]??m[4]??m[5]??'').trim()})}if(out.length!==6)return{ok:false,error:`El prompt debe tener 6 escenas. Encontré ${out.length}.`,scenes:out};if(new Set(out.map(x=>x.name)).size!==6)return{ok:false,error:'Los 6 nombres deben ser distintos.',scenes:out};const bad=out.find(x=>!/^[A-Za-z0-9_-]+$/.test(x.name));if(bad)return{ok:false,error:`Nombre inválido: ${bad.name}. Usa letras, números, guion y guion bajo.`,scenes:out};return{ok:true,scenes:out}}
+function syncPrompt(show=true){const parsed=parseScenes(document.getElementById('promptText').value);if(parsed.ok){sceneNames=parsed.scenes.map(s=>s.name);sceneAnimations=parsed.scenes.map(s=>s.animation);if(show)setTxt('promptStatus','✅ 6 escenas detectadas:\n'+sceneNames.map((n,i)=>`${i+1}. ${n}`).join('\n'));renderImages()}else if(show){setTxt('promptStatus','❌ '+parsed.error)}return parsed}
+function voiceBlocks(){return document.getElementById('voiceText').value.split('---').map(x=>x.trim()).filter(Boolean)}
+function updateVoiceStatus(){setTxt('voiceStatus','Bloques de voz detectados: '+voiceBlocks().length+'/6')}
+function renderImages(){const grid=document.getElementById('imageGrid');grid.innerHTML=sceneNames.map((name,i)=>`<div class="scene-card"><div class="scene-head"><span>Escena ${i+1}</span><span class="pill ${images[i]?'ok':'bad'}">${images[i]?'lista':'pendiente'}</span></div><div class="scene-name">${esc(name)}</div><div class="phone-frame" style="margin-top:10px">${previews[i]?`<img src="${previews[i]}">`:'Sin imagen<br>9:16'}</div><input type="file" accept="image/*" onchange="handleSingleUpload(event,${i})"><p class="muted small">${esc((sceneAnimations[i]||'').slice(0,130))}${(sceneAnimations[i]||'').length>130?'…':''}</p></div>`).join('')}
+function handleSingleUpload(e,i){const f=e.target.files?.[0];if(!f)return;images[i]=f;if(previews[i])URL.revokeObjectURL(previews[i]);previews[i]=URL.createObjectURL(f);renderImages()}
+function handleMultiUpload(e){[...(e.target.files||[])].slice(0,6).forEach((f,i)=>{images[i]=f;if(previews[i])URL.revokeObjectURL(previews[i]);previews[i]=URL.createObjectURL(f)});renderImages()}
+function clearImages(){previews.forEach(u=>u&&URL.revokeObjectURL(u));images=Array(6).fill(null);previews=Array(6).fill('');renderImages()}
+function validateProject(show=false){const p=syncPrompt(false);const img=images.filter(Boolean).length;const vb=voiceBlocks().length;const errors=[];if(!p.ok)errors.push(p.error);if(img!==6)errors.push(`Faltan imágenes: ${img}/6`);if(vb!==6)errors.push(`La voz debe tener 6 bloques. Hay ${vb}/6`);if(show)setTxt('validationBox',errors.length?'❌ Falta corregir:\n'+errors.map(e=>'• '+e).join('\n'):'✅ Todo listo.\nEscenas:\n'+sceneNames.map((n,i)=>`${i+1}. ${n}`).join('\n'));return errors.length===0}
+async function createJob(){if(!validateProject(true))return;const fd=new FormData();fd.append('project_title',document.getElementById('projectTitle').value.trim()||'Proyecto Maderoom Web');fd.append('category',document.getElementById('category').value);fd.append('selected_voice',document.getElementById('voice').value);fd.append('master_animation_prompt',document.getElementById('promptText').value);fd.append('voice_script',document.getElementById('voiceText').value);images.forEach((f,i)=>{fd.append(`scene_name_${i+1}`,sceneNames[i]);fd.append(`scene_file_${i+1}`,f,sceneNames[i]+'.png')});setTxt('validationBox','⏳ Creando proyecto real en Supabase...');try{const res=await fetch(API+'/create-animation-job',{method:'POST',body:fd});const data=await res.json();if(!res.ok||!data.ok)throw new Error(data.error||JSON.stringify(data));activeProjectId=data.project_id;localStorage.setItem('maderoom_active_project_id',activeProjectId);setTxt('validationBox',`✅ Proyecto creado\nProyecto: ${activeProjectId}\nJob: ${data.job_id}\n\nSiguiente: entra a Jobs reales y pulsa Generar / Continuar video completo.`);loadActiveFinalState();showPage('jobs')}catch(e){setTxt('validationBox','❌ '+e.message)}}
+function showPage(name){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById('page-'+name).classList.add('active');document.querySelectorAll('.nav-button').forEach(b=>b.classList.toggle('active',b.dataset.page===name));if(name==='jobs'){loadJobs();loadActiveFinalState()}if(name==='finales'){renderLocalTokenState();loadFinalProjects();checkLatestWorkflowRun(false)}}
+function showTab(name){document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));document.getElementById('tab-'+name).classList.add('active');document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));if(name==='prompt')syncPrompt(true);if(name==='voz')updateVoiceStatus();if(name==='generar')validateProject(true)}
+async function loadJobs(){const box=document.getElementById('jobsList');box.innerHTML='<section class="card">Cargando...</section>';try{const res=await fetch(API+'/jobs?v='+Date.now());const data=await res.json();const jobs=data.jobs||[];box.innerHTML=jobs.map(j=>`<section class="card"><div class="project-head"><strong>${esc(j.job_type)}</strong><span class="pill ${esc(j.status)}">${esc(j.status)}</span></div><p class="muted">Proyecto: ${esc(j.project_id)}</p><p>${esc(j.current_step||'')}</p><div class="progress"><div class="bar" style="width:${Number(j.progress||0)}%"></div></div><div class="toolbar"><button class="btn btn-soft" onclick="selectProject('${esc(j.project_id)}')">Seleccionar proyecto</button></div></section>`).join('')||'<section class="card">Sin jobs todavía.</section>'}catch(e){box.innerHTML='<section class="card">❌ '+esc(e.message)+'</section>'}}
+function selectProject(id){activeProjectId=id;localStorage.setItem('maderoom_active_project_id',id);loadActiveFinalState();showPage('jobs')}
+async function getFinalState(projectId=activeProjectId){const res=await fetch(FINAL_STATUS_API+'?project_id='+encodeURIComponent(projectId)+'&v='+Date.now());const data=await res.json();if(!res.ok)throw new Error(data.error||JSON.stringify(data));return data}
+async function loadActiveFinalState(){try{const data=await getFinalState(activeProjectId);const c=data.counts||{};setTxt('activeProjectBox',`Proyecto activo: ${activeProjectId}\nAnimaciones: ${c.animations||0}/6\nVoces: ${c.voices||0}/6\nMúsica: ${data.urls?.music?'lista ✅':'pendiente'}\nVideo final: ${data.urls?.final_video?'listo ✅':'pendiente'}`)}catch(e){setTxt('activeProjectBox','❌ '+e.message)}}
+async function processNextAnimation(){const res=await fetch(PROCESS_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({project_id:activeProjectId})});const data=await res.json();if(!res.ok)throw new Error(data.error||JSON.stringify(data));return data}
+async function processNextVoice(){const res=await fetch(VOICE_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({project_id:activeProjectId})});const data=await res.json();if(!res.ok)throw new Error(data.error||JSON.stringify(data));return data}
+async function processMusic(){const res=await fetch(MUSIC_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({project_id:activeProjectId})});const data=await res.json();if(!res.ok)throw new Error(data.error||JSON.stringify(data));return data}
+async function runNextPipelineStep(){setTxt('activeProjectBox','⏳ Revisando proyecto activo...');try{const data=await getFinalState(activeProjectId);const c=data.counts||{};if((c.animations||0)<6){setTxt('activeProjectBox','⏳ Procesando siguiente animación...');await processNextAnimation();return loadActiveFinalState()}if((c.voices||0)<6){setTxt('activeProjectBox','⏳ Generando siguiente voz...');await processNextVoice();return loadActiveFinalState()}if(!data.urls?.music){setTxt('activeProjectBox','⏳ Generando música...');await processMusic();return loadActiveFinalState()}setTxt('activeProjectBox','⏳ Lanzando/reemplazando video final...');await dispatchFinalVideo(activeProjectId,'activeProjectBox');await loadActiveFinalState()}catch(e){setTxt('activeProjectBox','❌ '+e.message)}}
+function getGitHubToken(){return localStorage.getItem('maderoom_github_worker_token')||''}
+function saveLocalGitHubToken(){const v=document.getElementById('githubWorkerToken').value.trim();if(!v){setTxt('githubTokenState','Pega el token primero.');return}localStorage.setItem('maderoom_github_worker_token',v);document.getElementById('githubWorkerToken').value='';renderLocalTokenState()}
+function clearLocalGitHubToken(){localStorage.removeItem('maderoom_github_worker_token');renderLocalTokenState()}
+function renderLocalTokenState(){setTxt('githubTokenState',getGitHubToken()?'Token local guardado ✅':'Token local pendiente')}
+async function githubFetch(path,options={}){const token=getGitHubToken();if(!token)throw new Error('Falta GitHub Worker Token. Guárdalo en Videos finales.');const res=await fetch('https://api.github.com'+path,{...options,headers:{Authorization:'Bearer '+token,Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28','Content-Type':'application/json',...(options.headers||{})}});if(res.status===204)return{ok:true};let data={};try{data=await res.json()}catch{}if(!res.ok)throw new Error(data.message||('GitHub HTTP '+res.status));return data}
+async function dispatchFinalVideo(projectId,statusId='workerStatus'){setTxt(statusId,'⏳ Validando proyecto y lanzando worker FFmpeg...');try{const state=await getFinalState(projectId);const c=state.counts||{};if((c.animations||0)<6)throw new Error('Faltan animaciones: '+(c.animations||0)+'/6');if((c.voices||0)<6)throw new Error('Faltan voces: '+(c.voices||0)+'/6');if(!state.urls?.music)throw new Error('Falta música.');await githubFetch('/repos/'+REPO+'/actions/workflows/'+encodeURIComponent(WORKFLOW_FILE)+'/dispatches',{method:'POST',body:JSON.stringify({ref:'main',inputs:{project_id:projectId}})});setTxt(statusId,`✅ Worker lanzado para reemplazar el final del proyecto\nProyecto: ${projectId}\n\nCuando termine, el MP4 anterior de ese proyecto será reemplazado por el nuevo.`);setTimeout(()=>checkLatestWorkflowRun(true),1500)}catch(e){setTxt(statusId,'❌ '+e.message)}}
+async function checkLatestWorkflowRun(show=true){try{const data=await githubFetch('/repos/'+REPO+'/actions/workflows/'+encodeURIComponent(WORKFLOW_FILE)+'/runs?per_page=1');const r=(data.workflow_runs||[])[0];if(!r){if(show)setTxt('workerStatus','No hay ejecuciones todavía.');return}setTxt('workerStatus',`Último worker FFmpeg\nEstado: ${r.status}\nConclusión: ${r.conclusion||'-'}\nCreado: ${r.created_at}\n\nCuando termine, pulsa Actualizar en Videos finales.`)}catch(e){if(show)setTxt('workerStatus','❌ '+e.message)}}
+async function loadFinalProjects(){const box=document.getElementById('finalProjectsList');box.innerHTML='<section class="card">Cargando proyectos...</section>';try{const res=await fetch(API+'/projects?v='+Date.now());const data=await res.json();if(!res.ok||!data.ok)throw new Error(data.error||JSON.stringify(data));const projects=data.projects||[];box.innerHTML=projects.map(p=>{const final=!!p.final_video_url;const c=p.counts||{};return `<section class="project-card"><div class="project-head"><div><h3>${esc(p.title||'Proyecto Maderoom')}</h3><p class="muted small">${esc(p.id)}</p></div><span class="pill ${final?'ok':'queued'}">${final?'video listo':'sin final'}</span></div><p class="muted">${esc(p.category||'')} · ${esc(p.status||'')}</p><p class="small">Animaciones ${c.animations||0}/6 · Voces ${c.voices||0}/6</p>${final?`<video src="${esc(p.final_video_url)}?v=${Date.now()}" controls playsinline></video><div class="toolbar"><a class="btn btn-green" href="${esc(p.final_video_url)}?download=${Date.now()}" download="maderoom_final.mp4">Descargar MP4</a><button class="btn btn-soft" onclick="window.open('${esc(p.final_video_url)}?v=${Date.now()}','_blank')">Abrir</button></div><div class="url">${esc(p.final_video_path||p.final_video_url)}</div>`:`<div class="status-box">Todavía no hay video final guardado para este proyecto.</div>`}<div class="toolbar"><button class="btn btn-soft" onclick="selectFinalProject('${esc(p.id)}')">Seleccionar</button><button class="btn btn-gold" onclick="dispatchFinalVideo('${esc(p.id)}','workerStatus')">${final?'Regenerar / reemplazar final':'Crear video final'}</button></div></section>`}).join('')||'<section class="card">No hay proyectos todavía.</section>'}catch(e){box.innerHTML='<section class="card">❌ '+esc(e.message)+'</section>'}}
+function selectFinalProject(id){activeProjectId=id;localStorage.setItem('maderoom_active_project_id',id);setTxt('workerStatus','Proyecto seleccionado: '+id)}
+function loadDefaultPrompt(){document.getElementById('promptText').value=DEFAULT_PROMPT;syncPrompt(true)}
+document.querySelectorAll('.nav-button').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.tab)));
+document.getElementById('promptText').value=DEFAULT_PROMPT;document.getElementById('voiceText').value=DEFAULT_VOICE;document.getElementById('promptText').addEventListener('input',()=>syncPrompt(true));document.getElementById('voiceText').addEventListener('input',updateVoiceStatus);syncPrompt(true);updateVoiceStatus();renderImages();renderLocalTokenState();loadActiveFinalState();
 </script>
 </body>
 </html>
