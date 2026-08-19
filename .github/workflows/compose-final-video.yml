@@ -17,6 +17,7 @@ permissions:
 env:
   SCENES_API: https://qlwcxovrdglmmvprddvj.supabase.co/functions/v1/maderoom-project-scenes
   UPLOAD_API: https://qlwcxovrdglmmvprddvj.supabase.co/functions/v1/maderoom-upload-final-video
+  MUSIC_BASE: https://qlwcxovrdglmmvprddvj.supabase.co/storage/v1/object/public/music-tracks
 
 jobs:
   compose:
@@ -56,13 +57,15 @@ jobs:
           set -euo pipefail
           curl -fsSL "$SCENES_API?project_id=$PROJECT_ID&v=$(date +%s)" -o project.json
           echo "Project payload downloaded"
-          jq '{project: .project.id, status: .project.status, scenes: (.scenes|length), music: (.project.music_track_url != null)}' project.json
+          jq '{project: .project.id, status: .project.status, scenes: (.scenes|length)}' project.json
           jq -r '.scenes | sort_by(.scene_number) | .[].animation_video_url' project.json > video_urls.txt
           jq -r '.scenes | sort_by(.scene_number) | .[].voice_audio_url' project.json > audio_urls.txt
-          jq -r '.project.music_track_url' project.json > music_url.txt
+          echo "$MUSIC_BASE/$PROJECT_ID/music/melodia_maderoom.mp3" > music_url.txt
           test "$(wc -l < video_urls.txt | tr -d ' ')" = "6"
           test "$(wc -l < audio_urls.txt | tr -d ' ')" = "6"
-          test "$(cat music_url.txt)" != "null"
+          grep -v -E '^(null|)$' video_urls.txt >/dev/null
+          grep -v -E '^(null|)$' audio_urls.txt >/dev/null
+          echo "Music URL: $(cat music_url.txt)"
 
       - name: Download assets
         shell: bash
@@ -71,19 +74,20 @@ jobs:
           i=1
           while read -r url; do
             echo "Downloading video $i"
-            curl -L --retry 4 --retry-delay 3 -o "v${i}.mp4" "$url"
+            curl -fL --retry 4 --retry-delay 3 -o "v${i}.mp4" "$url"
             test -s "v${i}.mp4"
             i=$((i+1))
           done < video_urls.txt
           i=1
           while read -r url; do
             echo "Downloading voice $i"
-            curl -L --retry 4 --retry-delay 3 -o "a${i}.mp3" "$url"
+            curl -fL --retry 4 --retry-delay 3 -o "a${i}.mp3" "$url"
             test -s "a${i}.mp3"
             i=$((i+1))
           done < audio_urls.txt
           MUSIC_URL=$(cat music_url.txt)
-          curl -L --retry 4 --retry-delay 3 -o music.mp3 "$MUSIC_URL"
+          echo "Downloading music"
+          curl -fL --retry 4 --retry-delay 3 -o music.mp3 "$MUSIC_URL"
           test -s music.mp3
 
       - name: Build scene clips
